@@ -1,7 +1,7 @@
 {
   "name": "devconnect-backend",
   "version": "1.0.0",
-  "description": "App to connect Devs",
+  "description": "Application to connect Devs",
   "keywords": [
     "node.js",
     "Javascript",
@@ -13,9 +13,11 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start":"node src/app.js",
+    "dev":"nodemon src/app.js"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11"
   }
 }
