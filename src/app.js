@@ -13,21 +13,27 @@ const app = express()
 //     // Saving data to DB
 //     res.send("Data successfully saved to Database")
 // })
-app.get("/test/:userId", (req, res) => {
-    console.log(req.params)
-    res.send({ firstName: "Aman", lastName: "Uniyal" })
+// app.get("/test/:userId", (req, res) => {
+//     console.log(req.params)
+//     res.send({ firstName: "Aman", lastName: "Uniyal" })
 
-})
+// })
+
 
 app.use("/", (req, res, next) => {
-    console.log("First Response")
+    console.log("First Response (Middleware)")
     next()
     // res.send("Aman Uniyal")
-},
-    (req, res) => {
-        res.send("2nd response")
-    }
-)
+})
+
+app.get("/user",(req,res,next)=>{
+    console.log("1st Route Handler")
+    next()
+},(req,res,next)=>{
+    console.log("2nd Route Handler")
+    res.send("Final Response")
+    next()
+})
 
 app.listen(3000, () => {
     console.log("Server is successfully listening on port 3000")
