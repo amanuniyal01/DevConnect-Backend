@@ -1,6 +1,9 @@
 const express = require("express")
 const app = express()
 const ConnectDB=require("./config/database")
+
+
+
 ConnectDB().then(()=>{
     console.log("Database connected Successfully")
     app.listen(3000, () => {
