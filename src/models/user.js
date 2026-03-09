@@ -4,9 +4,14 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     age: { type: Number, min: 0 },
-    gender: { type: String, enum: ['Male', 'Female', 'Other'] }
+    gender: { type: String, enum: ['Male', 'Female', 'Other'], },
+    photoUrl: { type: String, default: "https://www.prakrutimaa.com/images/profile.jpg" },
+    about: { type: String, default: "Dev is in Search for someone here" },
+    skills: {
+        type: [String]
+    }
 });
 
 // Create a User model from the schema(Always Starts with a capital letter)

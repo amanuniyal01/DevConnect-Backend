@@ -39,7 +39,7 @@ app.get("/user", async (req, res) => {
 
 app.get("/userId", async (req,res)=>{
     try{const userId= await User.findById("69a12103a38f224ed5e8e6e4")
-    if(userId.length===0){
+    if(!userId){
         res.send("No user found with this id")
     }
     else{
