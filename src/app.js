@@ -24,7 +24,7 @@ app.get("/user", async (req, res) => {
         const user = await User.findOne()
         if (user.length === 0) {
             res.send("No user found")
-        } 
+        }
         else { res.send(user) }
 
     }
@@ -37,22 +37,23 @@ app.get("/user", async (req, res) => {
 })
 // GET USER BY ID
 
-app.get("/userId", async (req,res)=>{
-    try{const userId= await User.findById("69a12103a38f224ed5e8e6e4")
-    if(!userId){
-        res.send("No user found with this id")
-    }
-    else{
-        res.send(userId)
-    }
+app.get("/userId", async (req, res) => {
+    try {
+        const userId = await User.findById("69a12103a38f224ed5e8e6e4")
+        if (!userId) {
+            res.send("No user found with this id")
+        }
+        else {
+            res.send(userId)
+        }
 
-}
-    catch(err){
+    }
+    catch (err) {
         res.status(400).send("Something went wrong")
 
     }
-    
-    
+
+
 
 
 }
@@ -74,6 +75,20 @@ app.get("/feed", async (req, res) => {
 
     }
 })
+app.patch("/user", async (req, res) => {
+    const userId = req.body.userId;
+    const data = req.body;
+
+    try {
+        const user = await User.findByIdAndUpdate({ _id: userId }, data, { returnDocument: "before" });
+        console.log(user)
+        res.send("User updated successfully")
+
+    } catch (err) {
+        res.status(400).send("Something went wrong")
+    }
+}
+)
 
 
 ConnectDB().then(() => {
