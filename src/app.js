@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const ConnectDB = require("./config/database")
 const User = require("./models/user")
+const { validateSignupData } = require("./utils/validation")
 // const data=req.body
 // Middleware express.json
 const ALLOWED_UPDATES = [
@@ -18,31 +19,19 @@ const ALLOWED_UPDATES = [
 app.use(express.json())
 
 app.post("/signup", async (req, res) => {
-    const { firstName, lastName, email, password, age } = req.body;
-    if (!firstName || !lastName || !email || !password || !age) {
-        return res.status(400).send("All required fields must be filled")
-    }
-    // Email basic validation
-    if (!email.includes("@")) {
-        return res.status(400).send("Invalid email format");
-    }
-    // Age Validation
-    if (age && age < 0) {
-        return res.status(400).send("Age cannot be negative");
-    }
-    //  Password validation
-    if (password.length < 6) {
-        return res.status(400).send("Password must be at least 6 characters");
-    }
+    try {
+        validateSignupData(req.body);
 
-    // Creating a new instance of the User model  
-    const user = new User(req.body)
+        // Encrypt the password
 
-    // Save the document to the database
-    await user.save()
-    res.send("User Added Successfully")
+        const user = new User(req.body);
+        await user.save();
 
-})
+        res.send("User Added Successfully");
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
 
 // GET ONE USER
 app.get("/user", async (req, res) => {
@@ -108,7 +97,7 @@ app.patch("/user/:userId", async (req, res) => {
     const data = req.body;
 
     try {
-           if (Object.keys(data).length === 0) {
+        if (Object.keys(data).length === 0) {
             return res.status(400).send("No data provided");
         }
 
@@ -118,7 +107,7 @@ app.patch("/user/:userId", async (req, res) => {
         if (data.age && data.age < 0) {
             return res.status(400).send("Age cannot be Negative")
         }
-       
+
         const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_UPDATES.includes(k))
         if (!isUpdateAllowed) {
             throw new Error("Update Not Allowed")

@@ -1,6 +1,6 @@
 const validator = require('validator')
-const ValidateSignupData = (req) => {
-    const { firstName, lastName, password, email } = req.body;
+const validateSignupData = (req) => {
+    const { firstName, lastName, password, email } = req;
     if (!firstName || !lastName) {
         throw new Error("Name is Required")
     }
@@ -15,4 +15,4 @@ const ValidateSignupData = (req) => {
     }
 
 }
-module.exports=ValidateSignupData()
+module.exports={validateSignupData}
