@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const ConnectDB = require("./config/database")
 const User = require("./models/user")
+const bcrypt = require("bcrypt")
 const { validateSignupData } = require("./utils/validation")
 // const data=req.body
 // Middleware express.json
@@ -20,9 +21,15 @@ app.use(express.json())
 
 app.post("/signup", async (req, res) => {
     try {
-        validateSignupData(req.body);
 
-        // Encrypt the password
+        // Validation of Data...
+        validateSignupData(req.body);
+        
+        // Encrypt the password...
+        const { password } = req.body;
+        const passwordHash=await bcrypt.hash(password,10)
+        console.log(passwordHash)
+
 
         const user = new User(req.body);
         await user.save();
