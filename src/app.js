@@ -4,6 +4,7 @@ const ConnectDB = require("./config/database")
 const User = require("./models/user")
 const bcrypt = require("bcrypt")
 const { validateSignupData } = require("./utils/validation")
+const validator = require("validator");
 // const data=req.body
 // Middleware express.json
 const ALLOWED_UPDATES = [
@@ -131,6 +132,41 @@ app.patch("/user/:userId", async (req, res) => {
     }
 }
 )
+
+
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+
+
+        // Validate email
+        if (!validator.isEmail(email)) {
+            return res.status(400).send("Invalid Email Format");
+        }
+
+        // Find user
+        const user = await User.findOne({ email }).select("+password");
+        if (!user) {
+            return res.status(404).send("User Not Found!");
+        }
+        console.log("Entered password:", password);
+        console.log("Stored password:", user.password);
+        // Compare password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+
+
+        if (!isValidPassword) {
+            return res.status(400).send("Invalid Credentials");
+        }
+
+        // Success
+        res.send("Login Successful");
+
+    } catch (err) {
+        res.status(500).send("Error: " + err.message);
+    }
+});
 
 
 ConnectDB().then(() => {
