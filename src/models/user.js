@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: "https://www.prakrutimaa.com/images/profile.jpg",
             validate(value) {
-                if (validator.isURL(value)) {
+                if (!validator.isURL(value)) {
                     throw new Error("Please use a valid URL.")
                 }
             }
