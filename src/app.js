@@ -5,6 +5,12 @@ const User = require("./models/user")
 const bcrypt = require("bcrypt")
 const { validateSignupData } = require("./utils/validation")
 const validator = require("validator");
+const cors = require("cors");
+
+app.use(cors({
+    origin: "http://localhost:3000", 
+    credentials: true
+}));
 // const data=req.body
 // Middleware express.json
 const ALLOWED_UPDATES = [
@@ -29,9 +35,6 @@ app.post("/signup", async (req, res) => {
         const { firstName, lastName, email, password } = req.body;
         // Encrypt the password...
         const passwordHash = await bcrypt.hash(password, 10)
-        console.log(passwordHash)
-
-
         const user = new User({
             firstName, lastName, email, password: passwordHash
         });
@@ -137,7 +140,7 @@ app.patch("/user/:userId", async (req, res) => {
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-        
+
 
 
         // Validate email
@@ -148,7 +151,7 @@ app.post("/login", async (req, res) => {
         // Find user
         const user = await User.findOne({ email }).select("+password");
         if (!user) {
-            return res.status(404).send("User Not Found!");
+            return res.status(404).send("Invalid Credentials!");
         }
         console.log("Entered password:", password);
         console.log("Stored password:", user.password);
@@ -156,12 +159,22 @@ app.post("/login", async (req, res) => {
         const isValidPassword = await bcrypt.compare(password, user.password);
 
 
-        if (!isValidPassword) {
+        if (isValidPassword) {
+            // Generate a JWT
+
+            // Add the Token to cookie and send back to the user.
+            res.cookie("token", "ghadvbjnklmaDSFDGFHGJH")
+
+
+            res.send("Login Successful");
+
+        }
+        else {
             return res.status(400).send("Invalid Credentials");
         }
 
-        // Success
-        res.send("Login Successful");
+
+
 
     } catch (err) {
         res.status(500).send("Error: " + err.message);
