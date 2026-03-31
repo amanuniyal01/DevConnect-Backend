@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt")
 const { validateSignupData } = require("./utils/validation")
 const validator = require("validator");
 const cors = require("cors");
+const cookieParser = require("cookie-parser")
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -28,6 +29,7 @@ const ALLOWED_UPDATES = [
 ]
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.post("/signup", async (req, res) => {
     try {
@@ -112,7 +114,8 @@ app.get("/feed", async (req, res) => {
 app.get("/profile", async (req, res) => {
     const cookies = req.cookies;
     console.log(cookies)
-    
+    res.send("Reading cookie")
+
 
 })
 app.patch("/user/:userId", async (req, res) => {
@@ -163,7 +166,7 @@ app.post("/login", async (req, res) => {
         if (!user) {
             return res.status(404).send("Invalid Credentials!");
         }
-      
+
         // Compare password
         const isValidPassword = await bcrypt.compare(password, user.password);
 
@@ -175,7 +178,7 @@ app.post("/login", async (req, res) => {
             res.cookie("token", "ghadvbjnklmaDSFDGFHGJH");
 
 
-            
+
 
         }
         else {
