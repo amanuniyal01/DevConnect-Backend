@@ -8,9 +8,12 @@ const validator = require("validator");
 const cors = require("cors");
 
 app.use(cors({
-    origin: "http://localhost:3000", 
+    origin: "http://localhost:3000",
     credentials: true
 }));
+
+
+
 // const data=req.body
 // Middleware express.json
 const ALLOWED_UPDATES = [
@@ -105,6 +108,13 @@ app.get("/feed", async (req, res) => {
 
     }
 })
+
+app.get("/profile", async (req, res) => {
+    const cookies = req.cookies;
+    console.log(cookies)
+    
+
+})
 app.patch("/user/:userId", async (req, res) => {
     const userId = req.params?.userId;
     const data = req.body;
@@ -153,8 +163,7 @@ app.post("/login", async (req, res) => {
         if (!user) {
             return res.status(404).send("Invalid Credentials!");
         }
-        console.log("Entered password:", password);
-        console.log("Stored password:", user.password);
+      
         // Compare password
         const isValidPassword = await bcrypt.compare(password, user.password);
 
@@ -163,10 +172,10 @@ app.post("/login", async (req, res) => {
             // Generate a JWT
 
             // Add the Token to cookie and send back to the user.
-            res.cookie("token", "ghadvbjnklmaDSFDGFHGJH")
+            res.cookie("token", "ghadvbjnklmaDSFDGFHGJH");
 
 
-            res.send("Login Successful");
+            
 
         }
         else {
