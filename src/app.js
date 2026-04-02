@@ -113,6 +113,7 @@ app.get("/feed", async (req, res) => {
 
 app.get("/profile", async (req, res) => {
     const cookies = req.cookies;
+    const { token } = cookies
     console.log(cookies)
     res.send("Reading cookie")
 
