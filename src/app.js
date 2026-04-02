@@ -7,6 +7,7 @@ const { validateSignupData } = require("./utils/validation")
 const validator = require("validator");
 const cors = require("cors");
 const cookieParser = require("cookie-parser")
+const jwt=require("jsonwebtoken")
 
 app.use(cors({
     origin: "http://localhost:3000",
