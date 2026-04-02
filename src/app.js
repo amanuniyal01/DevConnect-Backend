@@ -7,7 +7,7 @@ const { validateSignupData } = require("./utils/validation")
 const validator = require("validator");
 const cors = require("cors");
 const cookieParser = require("cookie-parser")
-const jwt=require("jsonwebtoken")
+const jwt = require("jsonwebtoken")
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -175,9 +175,11 @@ app.post("/login", async (req, res) => {
 
         if (isValidPassword) {
             // Generate a JWT
+            const token = jwt.sign({ _id: user._id }, "CONNECT_1234")
+            console.log(token)
 
             // Add the Token to cookie and send back to the user.
-            res.cookie("token", "ghadvbjnklmaDSFDGFHGJH");
+            res.cookie("token", token);
 
 
 
