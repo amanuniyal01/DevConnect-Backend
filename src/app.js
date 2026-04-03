@@ -113,17 +113,30 @@ app.get("/feed", async (req, res) => {
 })
 
 app.get("/profile", async (req, res) => {
-    const cookies = req.cookies;
-    const { token } = cookies
+    try {
+        const cookies = req.cookies;
+        const { token } = cookies
+        if (!token) {
+            throw new Error("Invalid Token.")
+        }
 
-    //Validating token
-    const decodedMessage = jwt.verify(token, "CONNECT_1234")
-    const { _id } = decodedMessage
-    console.log("LOGGED IN USER IS :" + _id)
-    const user = await User.findById(_id)
+        //Validating token
+        const decodedMessage = jwt.verify(token, "CONNECT_1234")
+        const { _id } = decodedMessage
+       
+        const user = await User.findById(_id)
+        if (!user) {
+            throw new Error("User not found !!")
 
-    // console.log(cookies)
-    res.send(user)
+        }
+
+       
+        res.send(user)
+    }
+    catch (err) {
+        res.status(400).send("Error :" + err.message)
+
+    }
 
 
 })
@@ -183,7 +196,7 @@ app.post("/login", async (req, res) => {
         if (isValidPassword) {
             // Generate a JWT
             const token = await jwt.sign({ _id: user._id }, "CONNECT_1234")
-            console.log(token)
+         
 
             // Add the Token to cookie and send back to the user.
             res.cookie("token", token);
@@ -207,7 +220,7 @@ app.post("/login", async (req, res) => {
 
 
 ConnectDB().then(() => {
-    console.log("Database connected Successfully")
+
     app.listen(3000, () => {
         console.log("Server is successfully listening on port 3000")
     })
