@@ -115,8 +115,15 @@ app.get("/feed", async (req, res) => {
 app.get("/profile", async (req, res) => {
     const cookies = req.cookies;
     const { token } = cookies
-    console.log(cookies)
-    res.send("Reading cookie")
+
+    //Validating token
+    const decodedMessage = jwt.verify(token, "CONNECT_1234")
+    const { _id } = decodedMessage
+    console.log("LOGGED IN USER IS :" + _id)
+    const user = await User.findById(_id)
+
+    // console.log(cookies)
+    res.send(user)
 
 
 })
@@ -175,11 +182,12 @@ app.post("/login", async (req, res) => {
 
         if (isValidPassword) {
             // Generate a JWT
-            const token = jwt.sign({ _id: user._id }, "CONNECT_1234")
+            const token = await jwt.sign({ _id: user._id }, "CONNECT_1234")
             console.log(token)
 
             // Add the Token to cookie and send back to the user.
             res.cookie("token", token);
+            res.send("Login Successfull")
 
 
 
