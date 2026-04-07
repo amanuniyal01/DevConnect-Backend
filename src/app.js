@@ -112,7 +112,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.post("/sendConnectionRequest", async (req, res) => {
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
     console.log(" Connected successfully");
     res.send("Connection send successfully");
 });
