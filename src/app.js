@@ -8,6 +8,7 @@ const validator = require("validator");
 const cors = require("cors");
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
+const auth=require("./middlewares/auth")
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -112,7 +113,7 @@ app.get("/feed", async (req, res) => {
     }
 })
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", async (auth,req, res) => {
     try {
         const cookies = req.cookies;
         const { token } = cookies
