@@ -55,8 +55,8 @@ app.post("/signup", async (req, res) => {
 
 app.get("/profile", userAuth, async (req, res) => {
     try {
-       const user=req.user;
-       res.send(user)
+        const user = req.user;
+        res.send(user)
     }
     catch (err) {
         res.status(400).send("Error :" + err.message)
@@ -110,6 +110,11 @@ app.post("/login", async (req, res) => {
     } catch (err) {
         res.status(500).send("Error: " + err.message);
     }
+});
+
+app.post("/sendConnectionRequest", async (req, res) => {
+    console.log(" Connected successfully");
+    res.send("Connection send successfully");
 });
 
 
