@@ -8,7 +8,7 @@ const validator = require("validator");
 const cors = require("cors");
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
-const auth=require("./middlewares/auth")
+const { userAuth } = require("./middlewares/auth")
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -53,86 +53,10 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-// GET ONE USER
-app.get("/user", async (req, res) => {
-    const email = req.body.email;
-    // const id=req.body.id
+app.get("/profile", userAuth, async (req, res) => {
     try {
-        const user = await User.findOne()
-        if (user.length === 0) {
-            res.send("No user found")
-        }
-        else { res.send(user) }
-
-    }
-    catch (err) {
-        res.status(400).send("Something went wrong")
-
-    }
-
-
-})
-// GET USER BY ID
-
-app.get("/userId", async (req, res) => {
-    try {
-        const userId = await User.findById("")
-        if (!userId) {
-            res.send("No user found with this id")
-        }
-        else {
-            res.send(userId)
-        }
-
-    }
-    catch (err) {
-        res.status(400).send("Something went wrong")
-
-    }
-
-
-
-
-}
-
-)
-// Feed API - GET/feed - get all the users from the database
-app.get("/feed", async (req, res) => {
-    try {
-        const users = await User.find({})
-        if (users.length === 0) {
-            res.send("No user found")
-        }
-        else {
-            res.send(users)
-        }
-    }
-    catch (err) {
-        res.status(400).send("Something went wrong!!")
-
-    }
-})
-
-app.get("/profile", async (auth,req, res) => {
-    try {
-        const cookies = req.cookies;
-        const { token } = cookies
-        if (!token) {
-            throw new Error("Invalid Token.")
-        }
-
-        //Validating token
-        const decodedMessage = jwt.verify(token, "CONNECT_1234")
-        const { _id } = decodedMessage
-       
-        const user = await User.findById(_id)
-        if (!user) {
-            throw new Error("User not found !!")
-
-        }
-
-       
-        res.send(user)
+       const user=req.user;
+       res.send(user)
     }
     catch (err) {
         res.status(400).send("Error :" + err.message)
@@ -141,37 +65,6 @@ app.get("/profile", async (auth,req, res) => {
 
 
 })
-app.patch("/user/:userId", async (req, res) => {
-    const userId = req.params?.userId;
-    const data = req.body;
-
-    try {
-        if (Object.keys(data).length === 0) {
-            return res.status(400).send("No data provided");
-        }
-
-        if (data.skills && data.skills.length > 10) {
-            return res.status(400).send("Maximum 10 skills allowed");
-        }
-        if (data.age && data.age < 0) {
-            return res.status(400).send("Age cannot be Negative")
-        }
-
-        const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_UPDATES.includes(k))
-        if (!isUpdateAllowed) {
-            throw new Error("Update Not Allowed")
-        }
-
-        const user = await User.findByIdAndUpdate({ _id: userId }, data, { returnDocument: "before", runValidator: true });
-
-        res.send("User updated successfully")
-
-    } catch (err) {
-        res.status(400).send("Update Failed!" + err.message)
-    }
-}
-)
-
 
 app.post("/login", async (req, res) => {
     try {
@@ -197,7 +90,7 @@ app.post("/login", async (req, res) => {
         if (isValidPassword) {
             // Generate a JWT
             const token = await jwt.sign({ _id: user._id }, "CONNECT_1234")
-         
+
 
             // Add the Token to cookie and send back to the user.
             res.cookie("token", token);
