@@ -89,11 +89,11 @@ app.post("/login", async (req, res) => {
 
         if (isValidPassword) {
             // Generate a JWT
-            const token = await jwt.sign({ _id: user._id }, "CONNECT_1234")
+            const token = await jwt.sign({ _id: user._id }, "CONNECT_1234", { expiresIn: "1d" })
 
 
             // Add the Token to cookie and send back to the user.
-            res.cookie("token", token);
+            res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000) });
             res.send("Login Successfull")
 
 
@@ -114,7 +114,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/sendConnectionRequest", userAuth, async (req, res) => {
     const user = req.user;
-    res.send(user.firstName+" " + "has sent you a Request.");
+    res.send(user.firstName + " " + "has sent you a Request.");
 });
 
 
