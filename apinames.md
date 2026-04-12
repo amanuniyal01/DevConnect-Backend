@@ -1,22 +1,19 @@
-DevConnect APIS:
+🚀 DevConnect APIs
 
-PROFILE ROUTER.
+👤 Profile Router
+POST /signup –> Register a new user account.
+POST /login –> Authenticate user and return JWT token.
+GET /profile/view –> Fetch logged-in user profile details.
+PATCH /profile/edit –> Update user profile information.
+PATCH /profile/password –> Securely update user password.
 
-- POST /signup
-- POST /login
-- PATCH /Profile/edit
-- GET /Profile/view
-- PATCH/profile/password
+🤝 Connection Request Router
+POST /request/send/like/:userId –> Send interest (right swipe) to a user.
+POST /request/send/pass/:userId –> Skip user (left swipe).
+POST /request/receive/accepted/:reqId –> Accept a received request.
+POST /request/receive/rejected/:reqId –> Reject a received request.
 
-CONNECTION REQUEST ROUTER.
-Status: Accepted , Rejected , Ignored , like.
-
-- POST /request/send/like/:userId ->User is interested Right Swipe(Sending).
-- POST /request/send/pass/:userId -> User is not interested Left Swipe(Sending).
-- POST /request/receive/accepted/:reqID ->User is interested(Receiving).
-- POST /request/receive/rejected/:reqID -> User is Not interested(Receiving).
-
-
-- GET /user/connections -> Get a list of connections for the logged-in user.
-- GET /user/requests/received -> Retrieve a list of received connection requests.
-- GET /user/feed -> Get a list of suggested users to connect with.
+🌐 User APIs
+GET /user/connections –> Get all accepted user connections.
+GET /user/requests/received –> Fetch all received connection requests.
+GET /user/feed –> Get suggested users for connection.
