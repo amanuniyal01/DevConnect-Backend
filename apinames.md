@@ -1,8 +1,11 @@
-🚀 DevConnect APIs
+🚀DevConnect APIs
 
-👤 Profile Router
+☑️Auth Router
 POST /signup –> Register a new user account.
 POST /login –> Authenticate user and return JWT token.
+POST/logout -> Logout User from Webpage.
+
+👤 Profile Router
 GET /profile/view –> Fetch logged-in user profile details.
 PATCH /profile/edit –> Update user profile information.
 PATCH /profile/password –> Securely update user password.
