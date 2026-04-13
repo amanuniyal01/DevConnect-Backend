@@ -1,10 +1,10 @@
 const express = require("express")
 const app = express()
 const ConnectDB = require("./config/database")
-const bcrypt = require("bcrypt")
 const cors = require("cors");
 const cookieParser = require("cookie-parser")
 const { userAuth } = require("./middlewares/auth")
+
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -28,21 +28,12 @@ const ALLOWED_UPDATES = [
 
 app.use(express.json())
 app.use(cookieParser())
+const authRouter = require("./routes/auth")
+app.use('/', authRouter)
 
 
 
-app.get("/profile", userAuth, async (req, res) => {
-    try {
-        const user = req.user;
-        res.send(user)
-    }
-    catch (err) {
-        res.status(400).send("Error :" + err.message)
 
-    }
-
-
-})
 
 
 

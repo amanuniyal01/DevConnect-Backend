@@ -1,10 +1,11 @@
 const express = require('express')
-const userAuth = express.Router()
-const { validateSignupData } = require("./utils/validation")
-const User = require("./models/user")
+const authRouter = express.Router()
+const { validateSignupData } = require('../utils/validation')
+const User = require("../models/user")
 const validator = require("validator");
+const bcrypt = require("bcrypt")
 
-userAuth.post("/signup", async (req, res) => {
+authRouter.post("/signup", async (req, res) => {
     try {
 
         // Validation of Data...
@@ -24,7 +25,7 @@ userAuth.post("/signup", async (req, res) => {
     }
 });
 
-userAuth.post("/login", async (req, res) => {
+authRouter.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -70,3 +71,5 @@ userAuth.post("/login", async (req, res) => {
         res.status(500).send("Error: " + err.message);
     }
 });
+
+module.exports = authRouter;
