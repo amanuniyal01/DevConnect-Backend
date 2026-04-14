@@ -15,16 +15,7 @@ app.use(cors({
 
 // const data=req.body
 // Middleware express.json
-const ALLOWED_UPDATES = [
-    "firstName",
-    "lastName",
-    "age",
-    "gender",
-    "photoUrl",
-    "skills",
-    "about"
 
-]
 
 app.use(express.json())
 app.use(cookieParser())
