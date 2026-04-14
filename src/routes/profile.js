@@ -1,8 +1,8 @@
 const express = require('express')
 const profileRouter = express.Router()
-const {userAuth}=require('../middlewares/auth')
+const { userAuth } = require('../middlewares/auth')
 
-profileRouter.get("/profile", userAuth, async (req, res) => {
+profileRouter.get("/profile/view", userAuth, async (req, res) => {
     try {
         const user = req.user;
         res.send(user)
@@ -10,6 +10,18 @@ profileRouter.get("/profile", userAuth, async (req, res) => {
     catch (err) {
         res.status(400).send("Error :" + err.message)
 
+    }
+
+
+})
+
+profileRouter.patch("/profile/update", (req, res) => {
+    try {
+        res.send("Profile updated successfully.")
+
+    }
+    catch (err) {
+        res.status(400).send("Error :" + err.message)
     }
 
 
