@@ -15,6 +15,7 @@ const validateSignupData = (req) => {
     }
 
 }
+
 const validateUpdateProfileData = (req) => {
     const ALLOWED_UPDATES = [
         "firstName",
@@ -24,15 +25,42 @@ const validateUpdateProfileData = (req) => {
         "photoUrl",
         "skills",
         "about"
+    ];
 
-    ]
+    
     const isUpdateAllowed = Object.keys(req.body).every(field =>
         ALLOWED_UPDATES.includes(field)
-    )
-    return isUpdateAllowed;
+    );
 
+    if (!isUpdateAllowed) {
+        throw new Error("This field cannot be updated.");
+    }
 
+    const { age, photoUrl, skills, about } = req.body;
 
-}
+    //  Age validation
+    if (age !== undefined && (age < 18 || age > 100)) {
+        throw new Error("Invalid Age");
+    }
 
-module.exports = { validateSignupData,validateUpdateProfileData }
+    //  URL validation 
+    if (photoUrl && !validator.isURL(photoUrl)) {
+        throw new Error("Please use a valid photo URL.");
+    }
+
+    //  Skills validation
+    if (skills && skills.length > 200) {
+        throw new Error("Please add valid skills.");
+    }
+
+    //  About validation
+    if (about && (about.length < 10 || about.length > 100)) {
+        throw new Error("About must be between 10 to 100 characters.");
+    }
+
+    return true;
+};
+
+module.exports = validateUpdateProfileData;
+
+module.exports = { validateSignupData, validateUpdateProfileData }

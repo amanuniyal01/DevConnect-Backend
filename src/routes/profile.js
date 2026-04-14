@@ -29,7 +29,7 @@ profileRouter.patch("/profile/update", userAuth, (req, res) => {
 
 
 
-        res.send('Profile Updated Successfully..')
+        res.send(`${LoggedInUser.firstName} Your Profile has been updated successfully.`)
     }
     catch (err) {
         res.status(400).send("Error :" + err.message)
