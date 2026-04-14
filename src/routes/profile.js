@@ -15,9 +15,9 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
 
 })
 
-profileRouter.patch("/profile/update", (req, res) => {
+profileRouter.patch("/profile/update", userAuth, (req, res) => {
     try {
-        res.send("Profile updated successfully.")
+
 
     }
     catch (err) {
