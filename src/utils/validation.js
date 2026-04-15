@@ -27,7 +27,7 @@ const validateUpdateProfileData = (req) => {
         "about"
     ];
 
-    
+
     const isUpdateAllowed = Object.keys(req.body).every(field =>
         ALLOWED_UPDATES.includes(field)
     );
@@ -60,7 +60,23 @@ const validateUpdateProfileData = (req) => {
 
     return true;
 };
+const validatePassword = (req) => {
+    const UPDATES_ALLOWED = ["newPassword", "confirmPassword"]
+    const isAllowedUpdatePassword = Object.keys(req.body).every((field) => UPDATES_ALLOWED.includes(field))
+    const { newPassword, confirmPassword } = req.body
+    if (!newPassword || !confirmPassword) {
+        throw new Error("All password fields are required.")
+    }
+    if (newPassword !== confirmPassword) {
+        throw new Error("Password not matching.")
+    }
+    if (!validator.isStrongPassword(newPassword)) {
+        throw new Error("Please use a strong password.")
+    }
+    return isAllowedUpdatePassword;
+
+}
 
 module.exports = validateUpdateProfileData;
 
-module.exports = { validateSignupData, validateUpdateProfileData }
+module.exports = { validateSignupData, validateUpdateProfileData, validatePassword }
