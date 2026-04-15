@@ -23,6 +23,7 @@ profileRouter.patch("/profile/update", userAuth, (req, res) => {
         }
         const LoggedInUser = req.user
         Object.keys(req.body).forEach((key) => LoggedInUser[key] = req.body[key])
+        await LoggedInUser.save()
 
 
 
