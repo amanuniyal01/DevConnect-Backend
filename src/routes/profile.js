@@ -16,7 +16,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
 
 })
 
-profileRouter.patch("/profile/update", userAuth, (req, res) => {
+profileRouter.patch("/profile/update", userAuth, async (req, res) => {
     try {
         if (!validateUpdateProfileData(req)) {
             throw new Error("This field cannot be updated.")
@@ -30,7 +30,10 @@ profileRouter.patch("/profile/update", userAuth, (req, res) => {
 
 
 
-        res.send(`${LoggedInUser.firstName} Your Profile has been updated successfully.`)
+        res.json({
+            message: `${LoggedInUser.firstName} Your Profile has been updated successfully.`,
+            data: LoggedInUser
+        })
     }
     catch (err) {
         res.status(400).send("Error :" + err.message)
