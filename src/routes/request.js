@@ -16,7 +16,16 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
             })
 
         }
+        const isConnectionRequestExist = await ConnectionRequest.findOne({
+            $or: [
+                { senderUserId, receiverUserId },
+                { senderUserId: receiverUserId, receiverUserId: senderUserId }
+            ]
 
+        })
+        if (isConnectionRequestExist) {
+            return res.status(400).send("User has already sent you a request.")
+        }
         const connectionRequest = new ConnectionRequest({
             senderUserId,
             receiverUserId,
