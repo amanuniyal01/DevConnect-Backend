@@ -16,7 +16,6 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
             return res.status(400).json({ message: "User not found", data: toUser })
 
         }
-        console.log(toUser.firstName)
 
         if (!allowedStatusTypes.includes(status)) {
             return res.status(400).json({
