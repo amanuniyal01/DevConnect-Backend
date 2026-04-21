@@ -18,5 +18,13 @@ const connectionRequestSchema = new mongoose.Schema({
         }
     }
 }, { timestamps: true })
+connectionRequestSchema.pre("save", function (next) {
+    const connectionRequest = this;
+    if (connectionRequest.senderUserId.equals(connectionRequest.receiverUserId)) {
+        throw new Error("Users are not permitted to send connection requests to their own profile.")
+    }
+    next()
+
+})
 
 module.exports = mongoose.model("ConnectionRequest", connectionRequestSchema)

@@ -2,6 +2,7 @@ const express = require('express')
 const requestRouter = express.Router()
 const { userAuth } = require('../middlewares/auth')
 const ConnectionRequest = require("../models/connectionRequest")
+const User = require("../models/user")
 
 requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
     try {
@@ -9,6 +10,8 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
         const receiverUserId = req.params.toUserId;
         const status = req.params.status;
         const allowedStatusTypes = ["interested", "ignored"];
+    
+
         if (!allowedStatusTypes.includes(status)) {
             return res.status(400).json({
                 message: "Invalid status type",
