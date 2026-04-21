@@ -11,11 +11,12 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
         const status = req.params.status;
         const allowedStatusTypes = ["interested", "ignored"];
 
-        const toUser = User.findById(receiverUserId)
+        const toUser = await User.findById(receiverUserId)
         if (!toUser) {
             return res.status(400).json({ message: "User not found", data: toUser })
 
         }
+        console.log(toUser.firstName)
 
         if (!allowedStatusTypes.includes(status)) {
             return res.status(400).json({
@@ -41,7 +42,10 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
         });
 
         const data = await connectionRequest.save();
-        res.json({ message: req.user.firstName + "has sent" + +"a friend request", data });
+        res.json({
+            message: `${req.user.firstName} has ${status} ${toUser.firstName}'s profile`,
+            data
+        });
     }
     catch (err) {
         res.status(400).send("Error: " + err.message);

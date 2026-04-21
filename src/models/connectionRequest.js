@@ -23,7 +23,7 @@ connectionRequestSchema.pre("save", function (next) {
     if (connectionRequest.senderUserId.equals(connectionRequest.receiverUserId)) {
         throw new Error("Users are not permitted to send connection requests to their own profile.")
     }
-    next()
+    next;
 
 })
 
