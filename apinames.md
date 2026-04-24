@@ -17,6 +17,6 @@ POST /request/receive/accepted/:reqId –> Accept a received request.
 POST /request/receive/rejected/:reqId –> Reject a received request.
 
 🌐 User APIs
-GET /user/connections –> Get all accepted user connections.
 GET /user/requests/received –> Fetch all received connection requests.
+GET /user/connections –> Get all accepted user connections.
 GET /user/feed –> Get suggested users for connection.
