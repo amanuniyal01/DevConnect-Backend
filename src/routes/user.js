@@ -25,9 +25,18 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;
         const connections = await connectionRequest.find({
-            fromUserId: loggedInUser._id,
+            $or: [
+                {
+                    senderUserId: loggedInUser._id, status: "accepted",
+                    receiverUserId: loggedInUser._id, status: "accepted"
+                },
+                {
 
-            status: "accepted"
+                }
+            ]
+        })
+        res.json({
+            data:connections
         })
     }
     catch (err) {
