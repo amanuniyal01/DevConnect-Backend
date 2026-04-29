@@ -58,5 +58,15 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
 
 
 })
+userRouter.get("", userAuth, (req, res) => {
+    try {
+
+    }
+    catch (err) {
+        res.status(400).send("Error :" + err.message)
+
+    }
+
+})
 
 module.exports = userRouter;
