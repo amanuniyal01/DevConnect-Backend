@@ -1,6 +1,7 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const connectionRequest = require("../models/connectionRequest");
+const User = require("../models/user");
 const userRouter = express.Router()
 const USER_DETAILS = "firstName lastName age gender photoUrl about skills "
 
@@ -70,13 +71,19 @@ userRouter.get("/user/feed", userAuth, async (req, res) => {
         }).select("senderUserId receiverUserId")
         const alreadyUserConnections = new Set();
         connections.forEach((req) => {
-            alreadyUserConnections(req.senderUserId.toString());
-            alreadyUserConnections(req.receiverUserId.toString())
+            alreadyUserConnections.add(req.senderUserId.toString());
+            alreadyUserConnections.add(req.receiverUserId.toString())
         })
-        
+        const users = await User.find({
+            $and: [
+                { _id: { $nin: Array.from(alreadyUserConnections) } },
+                { _id: { $ne: loggedInUser._id } }
+            ]
+        }).select(USER_DETAILS)
+
 
         res.json({
-            data: connections
+            data: users
         })
 
     }
