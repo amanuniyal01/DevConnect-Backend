@@ -58,8 +58,20 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
 
 
 })
-userRouter.get("", userAuth, (req, res) => {
+userRouter.get("/user/feed", userAuth,async (req, res) => {
     try {
+        const loggedInUser = req.user;
+        const connections = await connectionRequest.find({
+            $or: [
+                { senderUserId: loggedInUser._id },
+                { receiverUserId: loggedInUser._id }
+            ]
+
+        }).select("senderUserId receiverUserId").populate("senderUserId","firstName").populate("receiverUserId","firstName")
+        
+        res.json({
+            data: connections
+        })
 
     }
     catch (err) {
