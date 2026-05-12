@@ -7,7 +7,7 @@ const userAuth = async (req, res, next) => {
         console.log(token)
 
         if (!token) {
-            return res.status(401).send("Unauthorized");
+            return res.status(401).send("Please Login First");
         }
 
         const decoded = jwt.verify(token, "CONNECT_1234");
