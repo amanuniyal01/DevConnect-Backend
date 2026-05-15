@@ -31,28 +31,28 @@ authRouter.post("/login", async (req, res) => {
 
 
 
-        // Validate email
+    
         if (!validator.isEmail(email)) {
             return res.status(400).send("Invalid Email Format");
         }
 
-        // Find user
+       
         const user = await User.findOne({ email }).select("+password");
         if (!user) {
             return res.status(404).send("Invalid Credentials!");
         }
 
-        // Compare password
+        
         const isValidPassword = await user.passwordValidation(password)
 
 
         if (isValidPassword) {
-            // Generate a JWT
+            
             const token = await user.getJWTToken()
            
 
 
-            // Add the Token to cookie and send back to the user.
+          
             res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000) });
             res.send(user)
 
